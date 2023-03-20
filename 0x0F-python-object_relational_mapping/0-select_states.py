@@ -1,32 +1,22 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+'''import required modules'''
+
 import MySQLdb
 import sys
+from db_conn import connect_db
+
+'''
+    Command line arguments for for mysql username,
+    mysql password, and database name
+'''
+_args = sys.argv
 
 if __name__ == "__main__":
-    # Get command line arguments
-    username = sys.argv[1]
-    password = sys.argv[2]
-    db_name = sys.argv[3]
-
-    # Connect to MySQL server
-    db = MySQLdb.connect(
-        host="localhost",
-        port=3306,
-        user=username,
-        passwd=password,
-        db=db_name,
-    )
-
-    # Create a cursor
+    db = connect_db(_args[1:])
     cur = db.cursor()
-
-    # Execute query
     cur.execute("SELECT * FROM states ORDER BY id ASC")
-
-    # Fetch all rows and print them
-    rows = cur.fetchall()
-    for row in rows:
+    query_rows = cur.fetchall()
+    for row in query_rows:
         print(row)
-
-    # Close database connection
+    cur.close()
     db.close()
